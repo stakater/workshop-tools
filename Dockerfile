@@ -5,15 +5,15 @@ ENV HOME=/home/developer
 RUN mkdir -p /projects ${HOME}
 
 ENV GLIBC_VERSION=2.30-r0 \
-    ODO_VERSION=v2.0.7 \
-    OC_VERSION=4.7 \
+    ODO_VERSION=v2.3.0 \
+    OC_VERSION=4.8 \
     KUBECTL_VERSION=v1.20.6 \
-    TKN_VERSION=0.13.0 \
+    TKN_VERSION=0.20.0 \
     MAVEN_VERSION=3.6.3 \
     JDK_VERSION=11 \
     YQ_VERSION=2.4.1 \
-    ARGOCD_VERSION=v1.7.7 \
-    IKE_VERSION=0.3.0 \
+    ARGOCD_VERSION=v2.1.5 \
+    IKE_VERSION=0.4.0 \
     JAVA_TOOL_OPTIONS="-Djava.net.preferIPv4Stack=true"
 
 RUN microdnf install -y \
@@ -58,14 +58,14 @@ RUN git clone https://github.com/telepresenceio/telepresence.git && \
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     microdnf install -y sshfs && \
-    rpm -e epel-release-7-13 && \
+    rpm -e epel-release-7-14 && \
     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     microdnf install -y torsocks && \
-    rpm -e epel-release-8-11.el8 && \
+    rpm -e epel-release-8-13.el8 && \
     microdnf clean all -y && \
     echo "Installed Telepresence Dependencies"
 
-RUN curl -sL http://git.io/get-ike | bash -s  -- --version=v${IKE_VERSION} --dir=/usr/local/bin && \
+RUN curl -sL http://git.io/get-ike | bash -s  -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name ike && \
     echo "Installed istio-workspace" && \
     ike version
 
