@@ -47,7 +47,6 @@ RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download
 RUN wget -qO /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64 && \
     chmod +x /usr/local/bin/argocd
 
-
 # install ike + telepresence
 # install telepresence
 ENV TELEPRESENCE_VERSION=0.109
@@ -65,7 +64,7 @@ RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.
     microdnf clean all -y && \
     echo "Installed Telepresence Dependencies"
 
-RUN curl -sL http://git.io/get-ike | bash -s  -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name ike && \
+RUN curl -sL http://git.io/get-ike | bash -s -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name=ike && \
     echo "Installed istio-workspace" && \
     ike version
 
