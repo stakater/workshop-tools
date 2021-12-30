@@ -14,6 +14,7 @@ ENV GLIBC_VERSION=2.30-r0 \
     YQ_VERSION=2.4.1 \
     ARGOCD_VERSION=v2.1.5 \
     IKE_VERSION=0.4.0 \
+    HELM_VERSION="3.6.1" \
     JAVA_TOOL_OPTIONS="-Djava.net.preferIPv4Stack=true"
 
 RUN microdnf install -y \
@@ -67,6 +68,14 @@ RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.
 RUN curl -sL http://git.io/get-ike | bash -s -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name=ike && \
     echo "Installed istio-workspace" && \
     ike version
+
+# install helm
+RUN cd /tmp && \
+    wget -q https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
+    tar -xvf helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
+    chmod +x linux-amd64/helm && \
+    mv linux-amd64/helm /usr/local/bin/ && \
+    rm -rf ./*
 
 # install maven
 ENV MAVEN_HOME /usr/lib/mvn
