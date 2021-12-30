@@ -24,29 +24,35 @@ RUN microdnf install -y \
 
 # install oc
 RUN wget -qO- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | tar xvz -C /usr/local/bin && \
-    oc version --client
+    oc version --client && \
+    echo "Installed oc"
 
 # install odo
 RUN wget -O /usr/local/bin/odo https://mirror.openshift.com/pub/openshift-v4/clients/odo/${ODO_VERSION}/odo-linux-amd64 && \
     chmod +x /usr/local/bin/odo && \
-    odo version --client
+    odo version --client && \
+    echo "Installed odo"
 
 # install kubectl
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl && \
-    kubectl version --client
+    kubectl version --client && \
+    echo "Installed kubectl"
 
 # install tekton
 RUN wget -qO- https://github.com/tektoncd/cli/releases/download/v${TKN_VERSION}/tkn_${TKN_VERSION}_Linux_x86_64.tar.gz | tar xvz -C /usr/local/bin && \
-    tkn version
+    tkn version && \
+    echo "Installed tekton"
 
 # install yq
 RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 && \
-    chmod +x /usr/local/bin/yq
+    chmod +x /usr/local/bin/yq && \
+    echo "Installed yq"
 
 # install argocd
 RUN wget -qO /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64 && \
-    chmod +x /usr/local/bin/argocd
+    chmod +x /usr/local/bin/argocd && \
+    echo "Installed argocd"
 
 # install ike + telepresence
 # install telepresence
@@ -75,7 +81,8 @@ RUN cd /tmp && \
     tar -xvf helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
     chmod +x linux-amd64/helm && \
     mv linux-amd64/helm /usr/local/bin/ && \
-    rm -rf ./*
+    rm -rf ./* && \
+    echo "Installed helm"
 
 # install maven
 ENV MAVEN_HOME /usr/lib/mvn
@@ -84,7 +91,8 @@ ENV PATH ${MAVEN_HOME}/bin:$PATH
 RUN wget http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
   tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
   rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
-  mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
+  mv apache-maven-$MAVEN_VERSION /usr/lib/mvn && \
+    echo "Installed maven"
 
 # Configure Java
 ENV JAVA_HOME ${GRAALVM_HOME}
