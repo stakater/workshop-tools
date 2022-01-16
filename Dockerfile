@@ -14,9 +14,11 @@ ENV GLIBC_VERSION=2.30-r0 \
     YQ_VERSION=2.4.1 \
     ARGOCD_VERSION=v2.1.5 \
     IKE_VERSION=0.4.0 \
-    HELM_VERSION="3.6.1" \
+    HELM_VERSION=3.6.1 \
+    TILT_VERSION=0.23.6 \
     JAVA_TOOL_OPTIONS="-Djava.net.preferIPv4Stack=true"
 
+# install packages
 RUN microdnf install -y \
         bash curl wget tar gzip java-${JDK_VERSION}-openjdk-devel git openssh which httpd python36 procps podman iptables && \
     microdnf -y clean all && rm -rf /var/cache/yum && \
@@ -84,6 +86,16 @@ RUN cd /tmp && \
     rm -rf ./* && \
     echo "Installed helm"
 
+# install tilt
+RUN cd /tmp && \
+    wget -q https://github.com/tilt-dev/tilt/releases/download/v${TILT_VERSION}/tilt.${TILT_VERSION}.linux.x86_64.tar.gz && \
+    tar -xvf tilt.${TILT_VERSION}.linux.x86_64.tar.gz && \
+    chmod +x tilt && \    
+    mv tilt /usr/local/bin/ && \
+    rm -rf ./* && \
+    tilt version && \
+    echo "Installed tilt"
+
 # install maven
 ENV MAVEN_HOME /usr/lib/mvn
 ENV PATH ${MAVEN_HOME}/bin:$PATH
@@ -94,14 +106,14 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/
   mv apache-maven-$MAVEN_VERSION /usr/lib/mvn && \
     echo "Installed maven"
 
-# Configure Java
+# configure Java
 ENV JAVA_HOME ${GRAALVM_HOME}
 
-# Entrypoints
+# entrypoints
 ADD etc/before-start.sh ${HOME}/before-start.sh
 ADD etc/entrypoint.sh ${HOME}/entrypoint.sh
 
-# Change permissions to let any arbitrary user
+# change permissions to let any arbitrary user
 RUN for f in "${HOME}" "/etc/passwd" "/projects"; do \
       echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
       chmod -R g+rwX ${f}; \
