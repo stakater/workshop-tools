@@ -20,7 +20,7 @@ ENV GLIBC_VERSION=2.30-r0 \
 
 # install packages
 RUN microdnf install -y \
-        bash curl wget tar gzip java-${JDK_VERSION}-openjdk-devel git openssh which httpd python36 procps podman iptables && \
+        bash curl wget tar gzip java-${JDK_VERSION}-openjdk-devel git openssh which httpd python36 procps podman iptables rsync && \
     microdnf -y clean all && rm -rf /var/cache/yum && \
     echo "Installed Packages" && rpm -qa | sort -V && echo "End Of Installed Packages"
 
@@ -66,11 +66,13 @@ RUN git clone https://github.com/telepresenceio/telepresence.git && \
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     microdnf install -y sshfs && \
-    rpm -e epel-release-7-14 && \
-    rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
+    rpm -e epel-release-7-14
+
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     microdnf install -y torsocks && \
-    rpm -e epel-release-8-13.el8 && \
-    microdnf clean all -y && \
+    rpm -e epel-release-8-13.el8
+    
+RUN microdnf clean all -y && \
     echo "Installed Telepresence Dependencies"
 
 RUN curl -sL http://git.io/get-ike | bash -s -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name=ike && \
