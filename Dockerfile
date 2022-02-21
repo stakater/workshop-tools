@@ -64,15 +64,6 @@ RUN git clone https://github.com/telepresenceio/telepresence.git && \
     PREFIX=/usr/local ./install.sh && \
     echo "Installed Telepresence"
 
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    microdnf install -y sshfs && \
-    rpm -e epel-release-7-14 && \
-    rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
-    microdnf install -y torsocks && \
-    rpm -e epel-release-8-13.el8 && \
-    microdnf clean all -y && \
-    echo "Installed Telepresence Dependencies"
-
 RUN curl -sL http://git.io/get-ike | bash -s -- --version=v${IKE_VERSION} --dir=/usr/local/bin --name=ike && \
     echo "Installed istio-workspace" && \
     ike version
