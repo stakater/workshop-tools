@@ -16,7 +16,9 @@ ENV GLIBC_VERSION=2.30-r0 \
     IKE_VERSION=0.4.0 \
     HELM_VERSION=3.6.1 \
     TILT_VERSION=0.23.6 \
-    JAVA_TOOL_OPTIONS="-Djava.net.preferIPv4Stack=true"
+    JAVA_TOOL_OPTIONS="-Djava.net.preferIPv4Stack=true" \
+    SOURCE_TO_IMAGE_VERSION=v1.3.1
+
 
 # install packages
 RUN microdnf install -y \
@@ -111,6 +113,13 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/
 
 # configure Java
 ENV JAVA_HOME ${GRAALVM_HOME}
+
+# install s2i
+RUN wget https://github.com/openshift/source-to-image/releases/download/${SOURCE_TO_IMAGE_VERSION}/source-to-image-v1.3.1-a5a77147-linux-amd64.tar.gz &&\
+    tar xvf source-to-image-v1.3.1-a5a77147-linux-amd64.tar.gz &&\
+    rm source-to-image-v1.3.1-a5a77147-linux-amd64.tar.gz &&\
+    cp s2i /usr/local/bin/ &&\
+    echo "Installed source-to-image"
 
 # entrypoints
 ADD etc/before-start.sh ${HOME}/before-start.sh
