@@ -20,7 +20,7 @@ ENV GLIBC_VERSION=2.30-r0 \
 
 # install packages
 RUN microdnf install -y \
-        bash curl wget tar gzip java-${JDK_VERSION}-openjdk-devel git openssh which httpd python36 procps podman iptables && \
+        bash curl wget tar gzip java-${JDK_VERSION}-openjdk-devel git openssh which httpd python36 procps podman iptables  source-to-image && \
     microdnf -y clean all && rm -rf /var/cache/yum && \
     echo "Installed Packages" && rpm -qa | sort -V && echo "End Of Installed Packages"
 
